@@ -4,8 +4,6 @@ import 'package:universe_explorer/planet.dart';
 import 'package:universe_explorer/universe_data.dart';
 
 class PlanetsScreen extends StatelessWidget {
-  void planetItemTap(String planet) {}
-
   final planets = [
     Planet(
         'mercurio',
@@ -13,7 +11,8 @@ class PlanetsScreen extends StatelessWidget {
         'Mercúrio',
         'Mercúrio é o planeta mais próximo ao Sol e o oitavo em tamanho no '
             'sistema solar. A distância média é de 57,9 milhões de '
-            'quilômetros do Sol.'),
+            'quilômetros do Sol.',
+        false),
     Planet(
         'venus',
         'assets/img/venus.png',
@@ -21,49 +20,70 @@ class PlanetsScreen extends StatelessWidget {
         'Vênus é o segundo planeta do sistema Solar mais próximo do Sol. '
             'Tem cerca de 800 milhões de anos e além do Sol e da Lua é o '
             'corpo celeste mais brilhante no céu, motivo pelo qual é '
-            'conhecido desde a antiguidade.'),
+            'conhecido desde a antiguidade.',
+        false),
   ];
 
-  List<Widget> _buildPlanetas(BuildContext context) {
-    var items = <Widget>[];
-    for (var i = 0; i < planets.length; i++) {
-      items.add(
-        GestureDetector(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage(
-                  planets[i].image,
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(planets[i].name),
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlanetScreen(
-                  planet: planets[i],
-                ),
-              ),
-            );
-          },
-        ),
+  @override
+  Widget build(BuildContext context) {
+    return PlanetList(
+      planets: planets,
+    );
+  }
+}
+
+class PlanetList extends StatefulWidget {
+  PlanetList({Key key, this.planets}) : super(key: key);
+
+  final List<Planet> planets;
+
+  @override
+  _PlanetListState createState() => _PlanetListState();
+}
+
+class _PlanetListState extends State<PlanetList> {
+  void _handlePlanetLiked(Planet planet) {
+    setState(() {
+      widget.planets[widget.planets.indexOf(planet)].like = planet.like;
+    });
+  }
+
+  Icon _listTrailingIcon(Planet planet) {
+    print([planet.name, planet.like]);
+    if (planet.like) {
+      return Icon(
+        Icons.favorite,
+        color: Colors.red,
       );
-      items.add(
-        SizedBox(
-          height: 20,
-        ),
+    } else {
+      return Icon(
+        Icons.favorite,
+        color: Colors.grey,
       );
     }
+  }
 
-    return items;
+  Widget _buildListTitle(BuildContext context, Planet planet) {
+    return ListTile(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlanetDetails(
+              planet: planet,
+              onPlanetLike: _handlePlanetLiked,
+            ),
+          ),
+        );
+      },
+      leading: CircleAvatar(
+        backgroundImage: AssetImage(
+          planet.image,
+        ),
+      ),
+      title: Text(planet.name),
+      trailing: _listTrailingIcon(planet),
+    );
   }
 
   @override
@@ -73,19 +93,11 @@ class PlanetsScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text("Planetas"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: _buildPlanetas(context),
-                ),
-              ),
-            ),
-          ],
-        ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        children: widget.planets.map((Planet planet) {
+          return _buildListTitle(context, planet);
+        }).toList(),
       ),
     );
   }
