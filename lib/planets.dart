@@ -24,6 +24,48 @@ class PlanetsScreen extends StatelessWidget {
             'conhecido desde a antiguidade.'),
   ];
 
+  List<Widget> _buildPlanetas(BuildContext context) {
+    var items = <Widget>[];
+    for (var i = 0; i < planets.length; i++) {
+      items.add(
+        GestureDetector(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage(
+                  planets[i].image,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(planets[i].name),
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlanetScreen(
+                  planet: planets[i],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+      items.add(
+        SizedBox(
+          height: 20,
+        ),
+      );
+    }
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,65 +80,7 @@ class PlanetsScreen extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                    GestureDetector(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage: AssetImage(
-                              'assets/img/mercurio.jpg',
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('Mercúrio'),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlanetScreen(
-                              planet: planets[0],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage: AssetImage(
-                              planets[1].image,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(planets[1].name),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlanetScreen(
-                              planet: planets[1],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                  children: _buildPlanetas(context),
                 ),
               ),
             ),
