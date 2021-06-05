@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'planets.dart';
+import 'package:provider/provider.dart';
+import 'package:universe_explorer/models/universe_data.dart';
+import 'package:universe_explorer/screens/login.dart';
 
 /// Um widget que representa a tela inicial (home)
 /// que apresenta uma imagem de fundo, um texto com
 /// o nome do aplicativo e um botão para prosseguir
-/// para a tela [PlanetsScreen].
+/// para a tela [LoginScreen].
 class HomeScreen extends StatelessWidget {
   /// Constrói a árvore de widgets, que é composta por um
   /// [Container] que utiliza uma imagem de fundo e três filhos:
@@ -39,10 +41,7 @@ class HomeScreen extends StatelessWidget {
             ),
             label: Text('INICIAR'),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PlanetsScreen()),
-              );
+              Navigator.pushNamed(context, '/login');
             },
           ),
         ],
