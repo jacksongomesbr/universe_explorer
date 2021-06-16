@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:universe_explorer/models/universe_data.dart';
+import 'package:universe_explorer/models/planetas_explorados.dart';
 import 'package:universe_explorer/screens/login.dart';
 
 /// Um widget que representa a tela inicial (home)
